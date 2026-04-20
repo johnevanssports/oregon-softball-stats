@@ -236,13 +236,13 @@ function renderOverview(){
     {l:'Staff ERA',v:fn(pitching_totals.era,2),s:'K% '+fp(pitching_totals.k_pct)+' · FIP '+fn(pitching_totals.fip,2)},
   ].map(c=>'<div class="card"><div class="lbl">'+c.l+'</div><div class="val">'+c.v+'</div><div class="sub">'+c.s+'</div></div>').join('');
 
-  const top=[...batting].filter(b=>b.ab>=20).sort((a,b_)=>b_.rc-a.rc).slice(0,9);
+  const top=[...batting].filter(b=>b.ab>=20).sort((a,b_)=>b_.ops-a.ops).slice(0,9);
   document.getElementById('ov-bat').innerHTML='<table><thead><tr><th>Player</th><th>AVG</th><th>HR</th><th>RBI</th><th>OPS</th><th title="* Oregon avg = 100">wRC+</th></tr></thead><tbody>'+
     top.map(b=>'<tr><td style="cursor:pointer" onclick="openPlayer(\''+b.player+'\')">'+b.player.split(' ').pop()+'</td><td>'+fa(b.avg)+'</td><td>'+b.hr+'</td><td>'+b.rbi+'</td><td class="'+cOPS(b.ops)+'">'+fn(b.ops,3)+'</td><td class="'+cWRC(b.wrc_plus)+'">'+(b.wrc_plus!=null?b.wrc_plus:'—')+'</td></tr>').join('')+
     '</tbody></table>';
 
   document.getElementById('ov-pit').innerHTML='<table><thead><tr><th>Pitcher</th><th>W-L-SV</th><th>ERA</th><th title="* Oregon avg = 100">ERA+</th><th>FIP</th><th>K%</th></tr></thead><tbody>'+
-    pitching.map(p=>'<tr><td style="cursor:pointer" onclick="openPitcher(\''+p.pitcher+'\')">'+p.pitcher.split(' ').pop()+'</td><td>'+p.w+'-'+p.l+'-'+p.sv+'</td><td class="'+cERA(p.era)+'">'+fn(p.era,2)+'</td><td class="'+cERAp(p.era_plus)+'">'+(p.era_plus!=null?p.era_plus:'—')+'</td><td>'+fn(p.fip,2)+'</td><td>'+fp(p.k_pct)+'</td></tr>').join('')+
+    [...pitching].sort((a,b)=>a.era-b.era).map(p=>'<tr><td style="cursor:pointer" onclick="openPitcher(\''+p.pitcher+'\')">'+p.pitcher.split(' ').pop()+'</td><td>'+p.w+'-'+p.l+'-'+p.sv+'</td><td class="'+cERA(p.era)+'">'+fn(p.era,2)+'</td><td class="'+cERAp(p.era_plus)+'">'+(p.era_plus!=null?p.era_plus:'—')+'</td><td>'+fn(p.fip,2)+'</td><td>'+fp(p.k_pct)+'</td></tr>').join('')+
     '</tbody></table>';
 }
 
